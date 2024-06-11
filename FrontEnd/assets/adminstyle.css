@@ -94,3 +94,10 @@ nav li {
 li:hover {
 	color: #B1663C;
 }
+
+#error-message {
+	margin-top: 1rem;
+	font-size: 14px;
+	color: red;
+	/* display: none; */
+}

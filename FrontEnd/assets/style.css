@@ -189,3 +189,7 @@ footer nav ul {
 	margin: 2em
 }
 
+/* Partie de ce qui va réapparaître en mode édition :  */
+.admin  {
+display: none;
+}
