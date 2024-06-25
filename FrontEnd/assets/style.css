@@ -278,6 +278,19 @@ li:hover {
 	box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
 }
 
+/* Conteneur pour aligner le titre et le bouton "modifier" en ligne */
+.title-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.title-container i {
+	margin-left: 20px;
+	margin-right: 10px;
+}
+
+
 input[type="submit"] {
 	font-family: 'Syne';
 	font-weight: 700;
@@ -297,13 +310,14 @@ footer nav ul {
 
 /* Partie de ce qui va réapparaître en mode édition :  */
 .admin {
-	display: none;
+  display: none;
 }
 /* Conteneur pour afficher les boutons en ligne */
 #filter-form {
   display: flex;
   flex-wrap: wrap;
   gap: 10px; /* Ajoute un espace entre les boutons */
+  justify-content: center;
 }
 
 /* Styles pour les labels des boutons radio */
@@ -336,4 +350,128 @@ footer nav ul {
   justify-content: center;
   width: 100%;
   height: 100%;
+}
+
+.filter-button {
+  width: 179px;
+  height: 36px;
+  background: #1D6154;
+  color: #fff;
+  border: 1px solid #1D6154;
+  border-radius: 60px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  text-align: center;
+  font-size: 14px;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40vw;
+  height: 40vh;
+  background: #fff;
+  box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  display: none; /* Masquer par défaut */
+  z-index: 1000; /* Assurez-vous qu'elles apparaissent au-dessus des autres éléments */
+}
+
+.modal-content {
+  position: relative;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+}
+
+#openAddPhotoModal {
+	display: flex;
+	justify-content: center;
+	border-top: #1D6154 solid 1px;
+	margin: 20px;
+	background-color: red;
+}
+
+.modal .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal .back-arrow {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Styles pour le bouton "valider" */
+.validate-button {
+  background: #1D6154; /* Couleur de fond initiale */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 60px;
+  cursor: not-allowed; /* Curseur initial désactivé */
+  opacity: 0.5; /* Opacité initiale */
+  font-size: 16px;
+}
+
+.validate-button.active {
+  background: green; /* Change la couleur de fond quand activé */
+  cursor: pointer; /* Change le curseur quand activé */
+  opacity: 1; /* Change l'opacité quand activé */
+}
+
+/* Supprime les styles par défaut du bouton */
+button,
+input[type="submit"] {
+  background: none;
+  border: none;
+  color: #1D6154;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  padding: 10px 20px;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#modal-gallery-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+#modal-gallery-content img {
+  width: 100px;
+  height: auto;
+}
+
+.delete-icon {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }

@@ -14,7 +14,7 @@ function checkAuthentication() {
       '<a href="#">Logout</a>';
 
     // Afficher toutes les modales d'édition présentes sur la page
-    document.querySelectorAll(".modal").forEach((modal) => {
+    document.querySelectorAll(".admin").forEach((modal) => {
       modal.style.display = "block";
     });
 
@@ -191,6 +191,212 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+// Fonction pour récupérer et afficher la galerie dans la modale
+async function fetchAndDisplayGallery() {
+  try {
+    const response = await fetch('http://localhost:5678/api/works'); // URL de votre API
+    const galleryItems = await response.json();
+
+    // Stocker les éléments de la galerie dans le local storage
+    localStorage.setItem('galleryItems', JSON.stringify(galleryItems));
+    
+    // Sélectionnez l'élément de la modale où la galerie sera affichée
+    const modalContent = document.getElementById('modal-gallery-content');
+    modalContent.innerHTML = ''; // Videz le contenu précédent
+
+    // Parcourez les éléments de la galerie et ajoutez-les à la modale
+    galleryItems.forEach(item => {
+      const itemContainer = document.createElement('div');
+      itemContainer.classList.add('gallery-item');
+      itemContainer.style.position = 'relative'; // Ajout pour positionner l'icône de suppression
+
+      const img = document.createElement('img');
+      img.src = item.imageUrl;
+      img.alt = item.title;
+
+      const deleteIcon = document.createElement('img');
+      deleteIcon.src = './assets/icons/corbeille.png';
+      deleteIcon.alt = 'Supprimer';
+      deleteIcon.classList.add('delete-icon');
+      deleteIcon.addEventListener('click', () => deleteGalleryItem(item.id));
+
+      itemContainer.appendChild(img);
+      itemContainer.appendChild(deleteIcon);
+      modalContent.appendChild(itemContainer);
+    });
+  } catch (error) {
+    console.error('Erreur lors de la récupération des éléments de la galerie:', error);
+  }
+}
+
+// Écouteur d'événement pour le bouton "modifier"
+document.getElementById('openModalButton').addEventListener('click', () => {
+  // Affichez la modale
+  document.getElementById('editProjectModal').style.display = 'block';
+  
+  // Récupérez et affichez les éléments de la galerie dans la modale
+  fetchAndDisplayGallery();
+});
+
+// Écouteur d'événement pour fermer les modales
+document.querySelectorAll('.modal .close').forEach(closeBtn => {
+  closeBtn.addEventListener('click', () => {
+    closeBtn.closest('.modal').style.display = 'none';
+  });
+});
+
+// Écouteur d'événement pour le bouton "Ajouter une photo"
+document.getElementById('openAddPhotoModal').addEventListener('click', () => {
+  // Masquez la première modale
+  document.getElementById('editProjectModal').style.display = 'none';
+  // Affichez la nouvelle modale pour ajouter une photo
+  document.getElementById('addPhotoModal').style.display = 'block';
+});
+
+// Écouteur d'événement pour la flèche de retour
+document.querySelector('.back-arrow').addEventListener('click', () => {
+  // Masquez la deuxième modale
+  document.getElementById('addPhotoModal').style.display = 'none';
+  // Réaffichez la première modale
+  document.getElementById('editProjectModal').style.display = 'block';
+});
+
+// Écouteur d'événement pour le formulaire d'ajout de photo
+document.getElementById('addPhotoForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const category = document.getElementById('category').value;
+  const imageUrl = document.getElementById('imageUrl').value;
+
+  const newPhoto = {
+    title,
+    description,
+    category,
+    imageUrl
+  };
+
+  try {
+    const response = await fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newPhoto)
+    });
+
+    if (response.ok) {
+      // Fermez la modale
+      document.getElementById('addPhotoModal').style.display = 'none';
+      
+      // Mettez à jour la galerie
+      fetchAndDisplayGallery();
+    } else {
+      console.error('Erreur lors de l\'ajout de la photo:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout de la photo:', error);
+  }
+});
+
+// Fonction pour vérifier si tous les champs du formulaire sont remplis
+function checkFormValidity() {
+  const form = document.getElementById('addPhotoForm');
+  const validateButton = document.querySelector('.validate-button');
+  if (form.checkValidity()) {
+    validateButton.classList.add('active');
+    validateButton.removeAttribute('disabled');
+  } else {
+    validateButton.classList.remove('active');
+    validateButton.setAttribute('disabled', 'disabled');
+  }
+}
+
+// Ajoutez les écouteurs d'événements pour chaque champ du formulaire
+document.querySelectorAll('#addPhotoForm input, #addPhotoForm textarea, #addPhotoForm select').forEach(input => {
+  input.addEventListener('input', checkFormValidity);
+});
+
+
+// Écouteur d'événement pour le bouton "modifier"
+document.getElementById('openModalButton').addEventListener('click', () => {
+  // Affichez la modale
+  document.getElementById('editProjectModal').style.display = 'block';
+  
+  // Récupérez et affichez les éléments de la galerie dans la modale
+  fetchAndDisplayGallery();
+});
+
+// Écouteur d'événement pour fermer les modales
+document.querySelectorAll('.modal .close').forEach(closeBtn => {
+  closeBtn.addEventListener('click', () => {
+    closeBtn.closest('.modal').style.display = 'none';
+  });
+});
+
+// Écouteur d'événement pour le bouton "Ajouter une photo"
+document.getElementById('openAddPhotoModal').addEventListener('click', () => {
+  // Masquez la première modale
+  document.getElementById('editProjectModal').style.display = 'none';
+  // Affichez la nouvelle modale pour ajouter une photo
+  document.getElementById('addPhotoModal').style.display = 'block';
+});
+
+// Écouteur d'événement pour la flèche de retour
+document.querySelector('.back-arrow').addEventListener('click', () => {
+  // Masquez la deuxième modale
+  document.getElementById('addPhotoModal').style.display = 'none';
+  // Réaffichez la première modale
+  document.getElementById('editProjectModal').style.display = 'block';
+});
+
+// Écouteur d'événement pour le formulaire d'ajout de photo
+document.getElementById('addPhotoForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  const title = document.getElementById('title').value;
+  const description = document.getElementById('description').value;
+  const category = document.getElementById('category').value;
+  const imageUrl = document.getElementById('imageUrl').value;
+
+  const newPhoto = {
+    title,
+    description,
+    category,
+    imageUrl
+  };
+
+  try {
+    const response = await fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newPhoto)
+    });
+
+    if (response.ok) {
+      // Fermez la modale
+      document.getElementById('addPhotoModal').style.display = 'none';
+      
+      // Mettez à jour la galerie
+      fetchAndDisplayGallery();
+    } else {
+      console.error('Erreur lors de l\'ajout de la photo:', response.statusText);
+    }
+  } catch (error) {
+    console.error('Erreur lors de l\'ajout de la photo:', error);
+  }
+});
+
+
+// Écouteur d'événement pour fermer la modale
+document.querySelector('.close').addEventListener('click', () => {
+  document.getElementById('editProjectModal').style.display = 'none';
+});
+
+
 // Appel des fonctions
 
 checkAuthentication();
@@ -202,5 +408,7 @@ processItem(item);
 displayCategories();
 
 filterWorksByCategory(selectedCategory);
+
+fetchAndDisplayGallery() ;
 
 
