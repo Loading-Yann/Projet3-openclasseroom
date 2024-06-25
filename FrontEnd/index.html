@@ -25,7 +25,7 @@
 			<ul>
 				<li>projets</li>
 				<li>contact</li>
-				<li><a href="admin" id="loginlogoutbutton">login</a></li>
+				<li><a href="admin.html" id="login-logout-button">login</a></li>
 				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
 			</ul>
 		</nav>
@@ -47,31 +47,19 @@
 		</section>
 		<section id="portfolio">
 			<h2>Mes Projets</h2>
+			<button id="openModalButton" class="modal" style="display: none;">modifier</button>
+
 			<!-- Modales cachées par défaut -->
-			<div id="editProjectModal" class="modal" style="display: none;">
-				<div class="modal-content">
+			<aside id="editProjectModal" class="modal" aria-hidden="true" aria-modal="false" aria-labelledby="modal-projet" style="display: none;">
+				<div class="modal-content" >
 					<span class="close">&times;</span>
-					<form id="editProjectForm">
-						<h2>Modifier le Projet</h2>
-						<label for="title">Titre:</label>
-						<input type="text" id="title" name="title" required>
-						<label for="description">Description:</label>
-						<textarea id="description" name="description" required></textarea>
-						<label for="category">Catégorie:</label>
-						<select id="category" name="category" required>
-							<option value="1">Catégorie 1</option>
-							<option value="2">Catégorie 2</option>
-						</select>
-						<label for="imageUrl">URL de l'image:</label>
-						<input type="url" id="imageUrl" name="imageUrl" required>
-						<input type="submit" value="Enregistrer">
-					</form>
+				
 				</div>
-			</div>
+			</aside>
 			<form id="filter-form">
-				<label>
-					<input type="radio" name="category" value="all" checked>
-					Tous
+				<label class="radio-button-label">
+					<input type="radio" name="category" value="all" checked class="radio-button-input">
+					<span>Tous</span>
 				</label>
 				<div id="filter-container">
 					<!-- les autres filtres sont remplis par l'API -->
@@ -104,5 +92,20 @@
 		</nav>
 	</footer>
 </body>
-
+<!-- 	<form id="editProjectForm">
+						<h2>Galerie photo</h2>
+						<label for="title">Titre:</label>
+						<input type="text" id="title" name="title" required>
+						<label for="description">Description:</label>
+						<textarea id="description" name="description" required></textarea>
+						<label for="category">Catégorie:</label>
+						<select id="category" name="category" required>
+							<option value="1">Catégorie 1</option>
+							<option value="2">Catégorie 2</option>
+						</select>
+						<label for="imageUrl">URL de l'image:</label>
+						<input type="url" id="imageUrl" name="imageUrl" required>
+						<input type="submit" value="Enregistrer">
+					</form>
+					 -->
 </html>

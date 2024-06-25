@@ -1,13 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form');
+
   form.addEventListener('submit', async (event) => {
-      event.preventDefault(); // Empêche le comportement par défaut du formulaire
+    event.preventDefault(); // Empêche le comportement par défaut du formulaire
 
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-      // Appel à la fonction de vérification des identifiants
-      handleLogin(email, password);
+    // Appel à la fonction de vérification des identifiants
+    await handleLogin(email, password);
   });
 });
 
@@ -19,26 +20,29 @@ async function handleLogin(email, password) {
   errorMessage.style.display = 'none';
 
   try {
-      // Simuler une requête d'authentification
-      const response = await fetch('http://localhost:5678/api/users/login', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ email, password })
-      });
+    console.log('Sending request to server...');
 
-      if (!response.ok) {
-          throw new Error('Nom d\'utilisateur ou mot de passe incorrect.');
-      }
+    // Simuler une requête d'authentification
+    const response = await fetch('http://localhost:5678/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ email, password })
+    });
 
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
+    if (!response.ok) {
+      throw new Error('Nom d\'utilisateur ou mot de passe incorrect.');
+    }
 
-      // Redirection vers la page d'accueil
-      window.location.href = 'index.html';
+    const data = await response.json();
+    localStorage.setItem('token', data.token);
+
+    // Redirection vers la page d'accueil
+    window.location.href = 'index.html';
   } catch (error) {
-      errorMessage.textContent = error.message;
-      errorMessage.style.display = 'block';
+    console.error('Error:', error);
+    errorMessage.textContent = error.message;
+    errorMessage.style.display = 'block';
   }
 }
