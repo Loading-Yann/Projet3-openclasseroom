@@ -1,13 +1,5 @@
 // Fonction asynchrone pour récupérer les données
 async function fetchData() {
-  // Vérifier si les données sont dans le localStorage
-  const storedData = localStorage.getItem("apiData");
-  if (storedData) {
-    // Si les données sont dans le localStorage, les utiliser
-    const data = JSON.parse(storedData);
-    console.log("Données chargées à partir du localStorage", data);
-    return data;
-  }
 
   const requestOptions = {
     method: "GET", // Méthode GET pour récupérer les données
@@ -438,7 +430,7 @@ async function fetchAndDisplayGallery() {
 }
 
 
-
+// oups
 // Fonction pour envoyer une requête DELETE à l'API et supprimer l'image
 async function deleteImage(itemId, galleryItem) {
   const token = localStorage.getItem("token"); // Récupérer le token depuis le localStorage
@@ -521,13 +513,19 @@ async function createAddPhotoModal() {
     // Récupérer les données du formulaire
     const formData = new FormData(form);
 
+    // Récupérer le token depuis le localStorage
+    const token = localStorage.getItem("token");
+    console.log("Token récupéré:", token);
+
     // Créer les headers pour la requête
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer zekdfjql");
+    myHeaders.append("Authorization", "Bearer " + token); // Ajout de l'espace après Bearer
+
+    const fileInput = document.getElementById("photoUpload");
 
     // Préparer les données du formulaire
     const formdata = new FormData();
-    formdata.append("image", formData.get("photo")); // Utiliser le nom du champ dans votre formulaire
+    formdata.append("image", fileInput.files[0]);
     formdata.append("title", formData.get("title"));
     formdata.append("category", formData.get("photoCategory"));
 
@@ -636,7 +634,7 @@ async function createAddPhotoModal() {
   formGroup.appendChild(inputFile);
   formGroup.appendChild(uploadButton);
   formGroup.appendChild(fileTypeInfo);
-  formGroup.appendChild(imagePreviewContainer); // Ajouter le conteneur d'aperçu d'image je dois encore le modifier oups
+  formGroup.appendChild(imagePreviewContainer);
 
   formChamp.appendChild(labelForTitle);
   formChamp.appendChild(inputTitle);
@@ -667,10 +665,13 @@ async function createAddPhotoModal() {
 
 
 
+
 // Fonction pour afficher l'aperçu de l'image téléchargée
 function displayImagePreview() {
   const input = document.getElementById('photoUpload');
   const labelForUpload = document.getElementById('uploadIconLabel');
+  const fileTypeInfo = document.querySelector('.form-group p');
+  const uploadButton = document.querySelector('.upload-button');
 
   // Vérifier si un fichier a été sélectionné
   if (input.files && input.files[0]) {
@@ -686,11 +687,20 @@ function displayImagePreview() {
       // Remplacer l'icône par l'aperçu de l'image
       labelForUpload.innerHTML = '';
       labelForUpload.appendChild(img);
+
+      // Supprimer le paragraphe et le bouton de chargement
+      if (fileTypeInfo) {
+        fileTypeInfo.remove();
+      }
+      if (uploadButton) {
+        uploadButton.remove();
+      }
     };
 
     reader.readAsDataURL(input.files[0]);
   }
 }
+
 
 
 // Fonction pour vérifier la validité du formulaire et mettre à jour le bouton de soumission
