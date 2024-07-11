@@ -144,8 +144,40 @@ body {
 
 header {
 	display: flex;
+  flex-direction: column;
+  align-items: center;
 	justify-content: space-between;
 	margin: 50px 0
+}
+
+/* Assurez-vous que l'ensemble du bouton est cliquable */
+#editButton {
+  cursor: pointer;
+}
+
+#editButton:hover {
+  text-decoration: underline;
+}
+
+#editModeHeader {  
+  height: 59px;
+  background-color: black;
+  width: 100%;
+  margin-bottom: 50px;
+}
+#editModeHeader h2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 16px;
+  padding-top: 20px;
+}
+.header-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
 }
 
 section {
@@ -190,6 +222,10 @@ nav li {
 nav a {
 	text-decoration: none;
 	color: black
+}
+
+nav a:hover {
+	color: #B1663C;
 }
 
 li:hover {
@@ -312,6 +348,7 @@ footer nav ul {
 .admin {
   display: none;
 }
+
 /* Conteneur pour afficher les boutons en ligne */
 #filter-form {
   display: flex;
@@ -372,36 +409,209 @@ footer nav ul {
   position: fixed;
   top: 50%;
   left: 50%;
+  flex-grow: 1;
   transform: translate(-50%, -50%);
-  width: 40vw;
-  height: 40vh;
+  width: 50vw;
+  max-height: 60vh;
   background: #fff;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  display: none; /* Masquer par défaut */
-  z-index: 1000; /* Assurez-vous qu'elles apparaissent au-dessus des autres éléments */
+  display: none; 
+  z-index: 1000;  /* pour qu'elle apparaisse au dessus des autres éléments*/
+  padding: 50px;
+  padding-bottom: 100px;
+  overflow: auto;
 }
 
-.modal-content {
-  position: relative;
-  padding: 20px;
+.modal-gallery-content {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 5 colonnes de taille égale */
+  gap: 20px;
   width: 100%;
-  height: 100%;
-  overflow-y: auto; /* Ajoute une barre de défilement si nécessaire */
+  margin-bottom: 20px; /* Pour ajouter de l'espace entre la galerie et le bouton */
+}
+
+.modal-gallery-content img {
+  width: 15%;
+  height: auto;
+}
+.modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .modal-content h2 {
   margin-bottom: 20px;
 }
 
-#openAddPhotoModal {
-	display: flex;
-	justify-content: center;
-	border-top: #1D6154 solid 1px;
-	margin: 20px;
-	background-color: red;
+
+.image-container {
+  position: relative;
+  display: inline-block; 
+  margin: 10px; 
 }
 
+
+.image-container img {
+  display: block;
+  width: 50px; 
+  height: auto;
+}
+
+/* Styles pour l'icône de suppression */
+.delete-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10px;
+  height: 5px;
+  cursor: pointer;
+  z-index: 10; /* S'assurer que l'icône est au-dessus de l'image */
+  color: white;
+}
+/* div qui contient le logo de suppression */
+.delete-container {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: black;
+  padding: 2px;
+}
+
+.openModal2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.openAddPhotoModal {
+  width: 179px;
+  height: 36px;
+  background: #1D6154;
+  color: #fff;
+  border: 1px solid #1D6154;
+  border-radius: 60px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  text-align: center;
+  font-size: 14px;
+} 
+
+
+.addPhotoForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.uploadPhoto {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  display: flex; 
+  flex-direction : column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  width: 420px;
+height: 169px;
+border-radius: 3px;
+background: #E8F1F6;
+}
+.upload-icon {
+  font-size: 50px;
+  cursor: pointer;
+  display: block;
+  margin-bottom: 10px;
+  color: #B9C5CC;
+}
+.upload-button {
+  width: 179px;
+  height: 36px;
+  background: #CBD6DC;
+  color: #fff;
+  border-radius: 60px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.upload-button:hover {
+  background-color: #1D6154;
+}
+
+/* Input pour le téléchargement de la photo */
+input[type="file"] {
+  display: none;
+}
+
+/* Styles pour les labels et les inputs */
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="file"],
+input[type="button"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Ligne horizontale */
+hr {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 20px 0;
+}
+
+/* Bouton de soumission */
+.submit-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 179px;
+  height: 36px;
+  background: grey;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px auto;
+  text-align: center;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit-button.enabled {
+  background-color: #1D6154;
+}
+
+.submit-button.enabled:hover {
+text-decoration: underline;
+}
 .modal .close {
   position: absolute;
   top: 10px;
@@ -456,22 +666,18 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-#modal-gallery-content {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-#modal-gallery-content img {
-  width: 100px;
+.image-preview-container img {
+  max-width: 100%;
   height: auto;
 }
 
-.delete-icon {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
+
+.image-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 120px;
+  height: auto;
+  margin: 30px;
 }
