@@ -227,7 +227,12 @@ function createModal() {
     existingModal.remove();
   }
 
-  // Créer l'élément aside
+  // Créer l'élément aside pour le wrapper de la modale
+  const modalWrapper = document.createElement("div");
+  modalWrapper.classList.add("modal-wrapper");
+  modalWrapper.id = "editProjectModalWrapper";
+
+  // Créer l'élément aside pour la modale
   const aside = document.createElement("aside");
   aside.id = "editProjectModal";
   aside.classList.add("modal");
@@ -261,6 +266,7 @@ function createModal() {
 
   // Créer la ligne horizontale
   const hr = document.createElement("hr");
+  hr.classList.add("form-hr");
 
   // Créer le bouton pour ajouter une photo
   const addPhotoButton = document.createElement("button");
@@ -278,12 +284,15 @@ function createModal() {
   // Ajouter le contenu de la modale à l'aside
   aside.appendChild(modalContent);
 
-  // Ajouter l'aside au body
-  document.body.appendChild(aside);
+  // Ajouter l'aside au wrapper de la modale
+  modalWrapper.appendChild(aside);
+
+  // Ajouter le wrapper de la modale au body
+  document.body.appendChild(modalWrapper);
 
   // Ajouter un écouteur d'événement pour fermer la modale en cliquant à l'extérieur
   window.addEventListener("click", (event) => {
-    if (event.target === aside) {
+    if (event.target === modalWrapper) {
       closeModal();
     }
   });
@@ -309,15 +318,15 @@ function createModal() {
 }
 
 
+
 // Fonction pour fermer la modale
 function closeModal() {
-  const modal = document.getElementById("editProjectModal");
-  if (modal) {
-      modal.style.display = "none";
-      modal.setAttribute("aria-hidden", "true");
-      modal.setAttribute("aria-modal", "false");
+  const modalWrapper = document.getElementById("editProjectModalWrapper");
+  if (modalWrapper) {
+    modalWrapper.remove();
   }
 }
+
 
 // Ajouter un écouteur d'événement pour fermer la modale en cliquant à l'extérieur
 // window.addEventListener("click", (event) => {
@@ -371,16 +380,15 @@ function initEditModal() {
 }
 
 
-
-
-// Fonction pour ajouter un bouton "delete" à chaque élément de la galerie
 function addDeleteButton(galleryItem, itemId) {
   const deleteButton = document.createElement("button");
-  deleteButton.textContent = "Delete";
   deleteButton.classList.add("delete-button");
-  deleteButton.style.position = "absolute";
-  deleteButton.style.top = "5px";
-  deleteButton.style.left = "5px";
+
+  const icon = document.createElement("i");
+  icon.classList.add("fa-solid", "fa-trash");
+
+  deleteButton.appendChild(icon);
+
 
   // Ajout d'un écouteur d'événement pour le clic sur le bouton "delete"
   deleteButton.addEventListener("click", () => {
@@ -416,11 +424,9 @@ async function fetchAndDisplayGallery() {
     imageElement.src = item.imageUrl;
     imageElement.alt = item.title;
 
-    const textElement = document.createElement("p");
-    textElement.textContent = item.title;
+
 
     galleryItem.appendChild(imageElement);
-    galleryItem.appendChild(textElement);
 
     // Ajouter le bouton "delete" à chaque élément de la galerie
     addDeleteButton(galleryItem, item.id);
@@ -430,7 +436,6 @@ async function fetchAndDisplayGallery() {
 }
 
 
-// oups
 // Fonction pour envoyer une requête DELETE à l'API et supprimer l'image
 async function deleteImage(itemId, galleryItem) {
   const token = localStorage.getItem("token"); // Récupérer le token depuis le localStorage
@@ -458,14 +463,6 @@ async function deleteImage(itemId, galleryItem) {
 }
 
 
-// Fonction pour vider la modal actuelle
-function clearModal() {
-  const modalContent = document.querySelector('.modal-content');
-  if (modalContent) {
-    modalContent.innerHTML = '';
-  }
-}
-
 
 // Fonction pour récupérer les works depuis l'API
 async function fetchWorks() {
@@ -483,6 +480,8 @@ async function fetchWorks() {
 }
 
 
+
+// Fonction pour créer la modale d'ajout de photo
 async function createAddPhotoModal() {
   // Supprimer le contenu existant de la modale
   const modalContent = document.querySelector('#editProjectModal .modal-content');
@@ -492,7 +491,7 @@ async function createAddPhotoModal() {
   const backButton = document.createElement('button');
   backButton.classList.add('back-arrow');
   backButton.innerHTML = '<i class="fa-solid fa-arrow-left"></i>';
-  backButton.addEventListener('click', createModal); // Recrée la première modale au clic
+  backButton.addEventListener('click', createModal);
 
   const closeButton = document.createElement('span');
   closeButton.classList.add('close');
@@ -501,6 +500,7 @@ async function createAddPhotoModal() {
 
   const title = document.createElement('h2');
   title.textContent = 'Ajout photo';
+  title.classList.add('modal-title');
 
   const form = document.createElement('form');
   form.id = 'addPhotoForm';
@@ -508,48 +508,28 @@ async function createAddPhotoModal() {
 
   // Gestion de la soumission du formulaire
   form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Empêcher la soumission par défaut
-
-    // Récupérer les données du formulaire
+    e.preventDefault();
     const formData = new FormData(form);
-
-    // Récupérer le token depuis le localStorage
     const token = localStorage.getItem("token");
-    console.log("Token récupéré:", token);
-
-    // Créer les headers pour la requête
     const myHeaders = new Headers();
-    myHeaders.append("Authorization", "Bearer " + token); // Ajout de l'espace après Bearer
-
+    myHeaders.append("Authorization", "Bearer " + token);
     const fileInput = document.getElementById("photoUpload");
-
-    // Préparer les données du formulaire
     const formdata = new FormData();
     formdata.append("image", fileInput.files[0]);
     formdata.append("title", formData.get("title"));
     formdata.append("category", formData.get("photoCategory"));
-
-    // Préparer les options de la requête
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formdata,
       redirect: "follow"
     };
-
-    // URL de l'API sans ID spécifique pour créer un nouveau work
     const apiURL = `http://localhost:5678/api/works`;
-
     try {
       const response = await fetch(apiURL, requestOptions);
-
-      if (!response.ok) {
-        throw new Error(`Erreur: ${response.status}`);
-      }
-
+      if (!response.ok) throw new Error(`Erreur: ${response.status}`);
       const data = await response.json();
       console.log('Réponse de l\'API:', data);
-
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
     }
@@ -565,6 +545,12 @@ async function createAddPhotoModal() {
   labelForUpload.innerHTML = '<i class="fa-solid fa-image"></i>';
   labelForUpload.id = 'uploadIconLabel';
 
+  // Conteneur pour l'aperçu de l'image
+  const imagePreviewContainer = document.createElement('div');
+  imagePreviewContainer.id = 'imagePreviewContainer';
+  imagePreviewContainer.classList.add('image-preview-container');
+  labelForUpload.appendChild(imagePreviewContainer);
+
   const inputFile = document.createElement('input');
   inputFile.type = 'file';
   inputFile.id = 'photoUpload';
@@ -572,9 +558,10 @@ async function createAddPhotoModal() {
   inputFile.accept = 'image/jpeg, image/png';
   inputFile.required = true;
   inputFile.style.display = 'none';
+  inputFile.classList.add('file-upload');
   inputFile.addEventListener('change', () => {
     displayImagePreview();
-    checkFormValidity(); // Appeler checkFormValidity lors de la modification du fichier
+    checkFormValidity();
   });
 
   const uploadButton = document.createElement('button');
@@ -585,11 +572,7 @@ async function createAddPhotoModal() {
 
   const fileTypeInfo = document.createElement('p');
   fileTypeInfo.textContent = 'jpg, png, 4mo max';
-
-  // Conteneur pour l'aperçu de l'image
-  const imagePreviewContainer = document.createElement('div');
-  imagePreviewContainer.id = 'imagePreviewContainer';
-  imagePreviewContainer.classList.add('image-preview-container');
+  fileTypeInfo.classList.add('file-type-info');
 
   const formChamp = document.createElement('div');
   formChamp.classList.add('form-champ');
@@ -597,23 +580,35 @@ async function createAddPhotoModal() {
   const labelForTitle = document.createElement('label');
   labelForTitle.setAttribute('for', 'photoTitle');
   labelForTitle.textContent = 'Titre';
+  labelForTitle.classList.add('form-label');
 
   const inputTitle = document.createElement('input');
   inputTitle.type = 'text';
   inputTitle.id = 'photoTitle';
   inputTitle.name = 'title';
   inputTitle.required = true;
-  inputTitle.addEventListener('input', checkFormValidity); 
+  inputTitle.classList.add('text-input');
+  inputTitle.addEventListener('input', checkFormValidity);
 
   const labelForCategory = document.createElement('label');
   labelForCategory.setAttribute('for', 'photoCategory');
   labelForCategory.textContent = 'Catégorie :';
+  labelForCategory.classList.add('form-label');
 
   const selectCategory = document.createElement('select');
   selectCategory.id = 'pictures-category';
   selectCategory.name = 'photoCategory';
   selectCategory.required = true;
-  selectCategory.addEventListener('change', checkFormValidity); 
+  selectCategory.classList.add('select-category');
+  selectCategory.addEventListener('change', checkFormValidity);
+
+  // Ajouter l'option par défaut vide
+  const defaultOption = document.createElement('option');
+  defaultOption.value = '';
+  defaultOption.disabled = true;
+  defaultOption.selected = true;
+  selectCategory.appendChild(defaultOption);
+
   const categories = await fetchCategories();
   categories.forEach((category) => {
     const option = document.createElement('option');
@@ -623,11 +618,18 @@ async function createAddPhotoModal() {
   });
 
   const hr = document.createElement('hr');
+  hr.classList.add('form-hr');
+
+  // Créer le conteneur pour le bouton de soumission
+  const submitButtonContainer = document.createElement("div");
+  submitButtonContainer.classList.add("submit-button-container");
 
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
   submitButton.classList.add('submit-button');
   submitButton.textContent = 'Valider';
+
+  submitButtonContainer.appendChild(submitButton);
 
   // Assembler le formulaire
   formGroup.appendChild(labelForUpload);
@@ -638,13 +640,13 @@ async function createAddPhotoModal() {
 
   formChamp.appendChild(labelForTitle);
   formChamp.appendChild(inputTitle);
+  formChamp.appendChild(labelForCategory); // Ajout du labelForCategory dans formChamp
+  formChamp.appendChild(selectCategory);   // Ajout de selectCategory dans formChamp
 
   form.appendChild(formGroup);
   form.appendChild(formChamp);
-  form.appendChild(labelForCategory);
-  form.appendChild(selectCategory);
   form.appendChild(hr);
-  form.appendChild(submitButton);
+  form.appendChild(submitButtonContainer);
 
   // Assembler le contenu de la modale
   modalContent.appendChild(backButton);
@@ -659,12 +661,31 @@ async function createAddPhotoModal() {
     modal.setAttribute("aria-modal", "true");
   }
 
-  // Appeler checkFormValidity lors du charg ement initial pour configurer l'état du bouton
   checkFormValidity();
 }
 
 
 
+
+
+
+// Fonction pour vérifier la taille de l'image
+function checkImageSize(file) {
+  const maxFileSize = 4 * 1024 * 1024; // 4 Mo en octets
+  return file.size <= maxFileSize;
+}
+
+function displayErrorMessage() {
+  const sizeIndicator = document.getElementById('size-indicator');
+  let errorMessageElement = document.querySelector('.error-message');
+
+  if (!errorMessageElement) {
+    errorMessageElement = document.createElement('div');
+    errorMessageElement.classList.add('error-message');
+    errorMessageElement.textContent = "Oups ! Cette image est trop volumineuse ! Réduisez-la ou choisissez-en une autre.";
+    sizeIndicator.parentNode.insertBefore(errorMessageElement, sizeIndicator.nextSibling);
+  }
+}
 
 // Fonction pour afficher l'aperçu de l'image téléchargée
 function displayImagePreview() {

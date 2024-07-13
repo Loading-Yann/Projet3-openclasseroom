@@ -352,6 +352,7 @@ footer nav ul {
   display: none;
 }
 
+/**** Bouton radio filtre *******/
 /* Conteneur pour afficher les boutons en ligne */
 #filter-form {
   display: flex;
@@ -412,39 +413,64 @@ footer nav ul {
   font-size: 14px;
 }
 
-.modal {
+
+/******* Modal *********/
+
+/* Styles pour le wrapper de la modale */
+.modal-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  flex-grow: 1;
-  transform: translate(-50%, -50%);
-  width: 50vw;
-  max-height: 60vh;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+  padding: 20px; /* Pour les marges internes */
+  box-sizing: border-box;
+}
+
+/* Styles pour la fenêtre modale */
+.modal {
+  position: relative;
+  height: 670px;
+  width: 630px;
+  max-height: 80vh; 
+  max-width: 90vw; 
   background: #fff;
   box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
-  display: none;
-  z-index: 1000;
-  /* pour qu'elle apparaisse au dessus des autres éléments*/
-  padding: 50px;
-  padding-bottom: 100px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px; 
   overflow: auto;
 }
 
 .modal-gallery-content {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  /* 5 colonnes de taille égale */
   gap: 20px;
   width: 100%;
   margin-bottom: 20px;
-  /* Pour ajouter de l'espace entre la galerie et le bouton */
 }
 
 .modal-gallery-content img {
-  width: 15%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
+
+.delete-button {
+  position:absolute;
+  top: 0px;
+  right: 0px;
+  color: white;
+  background-color: black;
+  padding: 2px;
+  margin: 10px;
+}
+
 
 .modal-content {
   display: flex;
@@ -457,13 +483,11 @@ footer nav ul {
   margin-bottom: 20px;
 }
 
-
 .image-container {
   position: relative;
   display: inline-block;
   margin: 10px;
 }
-
 
 .image-container img {
   display: block;
@@ -471,36 +495,7 @@ footer nav ul {
   height: auto;
 }
 
-/* Styles pour l'icône de suppression */
-.delete-icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 10px;
-  height: 5px;
-  cursor: pointer;
-  z-index: 10;
-  /* S'assurer que l'icône est au-dessus de l'image */
-  color: white;
-}
 
-/* div qui contient le logo de suppression */
-.delete-container {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: black;
-  padding: 2px;
-}
-
-.openModal2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-}
 
 .openAddPhotoModal {
   width: 179px;
@@ -518,10 +513,12 @@ footer nav ul {
   font-size: 14px;
 }
 
-
 .addPhotoForm {
   display: flex;
   flex-direction: column;
+  align-items: center; 
+  justify-content: center;
+  padding: 20px;
 }
 
 .uploadPhoto {
@@ -530,24 +527,54 @@ footer nav ul {
 }
 
 .form-group {
+  position: relative; /* Assurez-vous que le positionnement est relatif */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   margin-bottom: 15px;
-  width: 420px;
-  height: auto;
+  width: 420px; /* Ajustez selon vos besoins */
+  height: auto; /* La hauteur doit être ajustée pour s'adapter à son contenu */
   border-radius: 3px;
   background: #E8F1F6;
-  padding: 30px;
+  overflow: hidden; /* Cache les éléments débordants */
+  padding: 20px;
+}
+
+
+.form-champ {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 420px ;
+  padding: 0px;
+}
+
+.form-label {
+  display: flex;
+  justify-content: baseline;
 }
 
 .upload-icon {
-  font-size: 50px;
   cursor: pointer;
-  display: block;
-  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
   color: #B9C5CC;
+}
+
+/* oups */
+.upload-icon i {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-message {
+	margin-top: 1rem;
+	font-size: 14px;
+	color: red;
+	/* display: none; */
 }
 
 .upload-button {
@@ -560,14 +587,41 @@ footer nav ul {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin: 10px auto;
   text-align: center;
   font-size: 14px;
   margin-bottom: 10px;
 }
 
+.upload-icon {
+  font-size: 76px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center; /* Centre l'icône horizontalement */
+  align-items: center; /* Centre l'icône verticalement */
+  margin-bottom: 10px;
+  color: #B9C5CC;
+}
+
 .upload-button:hover {
   background-color: #1D6154;
+}
+
+.image-preview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 120px; /* Ajustez la largeur selon vos besoins */
+  height: 120px; /* Ajustez la hauteur selon vos besoins */
+  margin: -30px; /* Ajustement de la marge si nécessaire */
+  overflow: hidden; /* Cache les parties débordantes de l'image */
+}
+
+.image-preview {
+  max-width: 100%; /* La largeur ne dépasse pas 100% de son conteneur */
+  max-height: 100%; /* La hauteur ne dépasse pas 100% de son conteneur */
+  object-fit: contain; /* Ajuste la taille tout en préservant le ratio d'aspect */
+  display: block; /* Assurez-vous que l'image est affichée en bloc */
 }
 
 /* Input pour le téléchargement de la photo */
@@ -576,47 +630,50 @@ input[type="file"] {
 }
 
 /* Styles pour les labels et les inputs */
-label {
+.form-label {
   display: block;
   margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="file"],
+.text-input,
+.select-category, 
+.file-upload,
 input[type="button"] {
-  width: 100%;
+  width: 80%;
   padding: 8px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  background: #FFF;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+  border: 1px solid #ccc; /* Ajout de la bordure */
 }
 
 /* Ligne horizontale */
-hr {
+.form-hr {
   border: 0;
   border-top: 1px solid #ccc;
   margin: 20px 0;
+  width: 90%;
 }
 
-/* Bouton de soumission */
-.submit-button {
+/* Conteneur pour centrer le bouton de soumission */
+.submit-button-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 179px;
-  height: 36px;
-  background: grey;
-  color: #fff;
-  border: 1px solid grey;
-  border-radius: 60px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin: 10px auto;
   text-align: center;
-  font-size: 14px;
-  margin-bottom: 10px;
+  justify-content: center; /* Centrer le bouton */
+  width: 100%; 
+}
+
+.submit-button {
+    width: 180px; /* Ajustez la largeur du bouton selon vos besoins */
+    height: 36px; /* Ajustez la hauteur du bouton selon vos besoins */
+    background-color: #1D6154;
+    color: white;
+    border: none;
+    border-radius: 60px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    margin: 10px; /* Centrer le bouton avec une marge autour */
 }
 
 .submit-button:disabled {
@@ -640,39 +697,23 @@ hr {
   cursor: pointer;
 }
 
-.modal .back-arrow {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-/* Styles pour le bouton "valider" */
 .validate-button {
   background: #1D6154;
-  /* Couleur de fond initiale */
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 60px;
   cursor: not-allowed;
-  /* Curseur initial désactivé */
   opacity: 0.5;
-  /* Opacité initiale */
   font-size: 16px;
 }
 
 .validate-button.active {
   background: green;
-  /* Change la couleur de fond quand activé */
   cursor: pointer;
-  /* Change le curseur quand activé */
   opacity: 1;
-  /* Change l'opacité quand activé */
 }
 
-/* Supprime les styles par défaut du bouton */
 button,
 input[type="submit"] {
   background: none;
@@ -685,20 +726,30 @@ input[type="submit"] {
   padding: 10px 20px;
 }
 
+/* Styles pour le bouton de retour */
+.back-arrow .close {
+  position: relative;
+  top: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.back-arrow {
+  position:absolute;
+  top: 20px;
+  left : 20px;
+  color: black;
+
+}
+.close {
+  right: 20px;
+}
+
 .close:hover,
 .close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-
-.image-preview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  width: 120px;
-  height: auto;
-  margin: -30px;
 }
