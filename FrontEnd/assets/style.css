@@ -203,10 +203,14 @@ h1>span {
 }
 
 h2 {
-  font-family: 'Syne';
-  font-weight: 700;
-  font-size: 30px;
-  color: #1D6154
+  color: #000;
+  text-align: center;
+  font-family: "Work Sans";
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  
 }
 
 nav ul {
@@ -480,7 +484,8 @@ footer nav ul {
 }
 
 .modal-content h2 {
-  margin-bottom: 20px;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 .image-container {
@@ -611,10 +616,10 @@ footer nav ul {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  width: 120px; /* Ajustez la largeur selon vos besoins */
-  height: 120px; /* Ajustez la hauteur selon vos besoins */
-  margin: -30px; /* Ajustement de la marge si nécessaire */
-  overflow: hidden; /* Cache les parties débordantes de l'image */
+  width: auto;
+  height: 200px; 
+  margin: -30px; 
+  overflow: hidden; 
 }
 
 .image-preview {
@@ -738,8 +743,8 @@ input[type="submit"] {
 
 .back-arrow {
   position:absolute;
-  top: 20px;
-  left : 20px;
+  top: 0px;
+  left : 10px;
   color: black;
 
 }

@@ -435,9 +435,9 @@ async function fetchAndDisplayGallery() {
   });
 }
 
-
 // Fonction pour envoyer une requête DELETE à l'API et supprimer l'image
-async function deleteImage(itemId, galleryItem) {
+async function deleteImage(itemId, galleryItem ) {
+
   const token = localStorage.getItem("token"); // Récupérer le token depuis le localStorage
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -454,9 +454,8 @@ async function deleteImage(itemId, galleryItem) {
     if (!response.ok) {
       throw new Error("Network response was not ok " + response.statusText);
     }
-    // Si la suppression est réussie, retirer l'élément de la galerie
-    galleryItem.remove();
-    console.log(`Image avec l'ID ${itemId} supprimée avec succès.`);
+    createModal();
+    //Oups, j'aimerais ici que ça rouvre la modal...
   } catch (error) {
     console.error("Erreur lors de la suppression de l'image:", error);
   }
@@ -544,12 +543,12 @@ async function createAddPhotoModal() {
   labelForUpload.classList.add('upload-icon');
   labelForUpload.innerHTML = '<i class="fa-solid fa-image"></i>';
   labelForUpload.id = 'uploadIconLabel';
-
-  // Conteneur pour l'aperçu de l'image
-  const imagePreviewContainer = document.createElement('div');
-  imagePreviewContainer.id = 'imagePreviewContainer';
-  imagePreviewContainer.classList.add('image-preview-container');
-  labelForUpload.appendChild(imagePreviewContainer);
+//oups
+   // Conteneur pour l'aperçu de l'image
+  // const imagePreviewContainer = document.createElement('div');
+  // imagePreviewContainer.id = 'imagePreviewContainer';
+  // imagePreviewContainer.classList.add('image-preview-container');
+  // labelForUpload.appendChild(imagePreviewContainer);
 
   const inputFile = document.createElement('input');
   inputFile.type = 'file';
@@ -636,7 +635,7 @@ async function createAddPhotoModal() {
   formGroup.appendChild(inputFile);
   formGroup.appendChild(uploadButton);
   formGroup.appendChild(fileTypeInfo);
-  formGroup.appendChild(imagePreviewContainer);
+  // formGroup.appendChild(imagePreviewContainer);
 
   formChamp.appendChild(labelForTitle);
   formChamp.appendChild(inputTitle);
@@ -682,12 +681,12 @@ function displayErrorMessage() {
   if (!errorMessageElement) {
     errorMessageElement = document.createElement('div');
     errorMessageElement.classList.add('error-message');
-    errorMessageElement.textContent = "Oups ! Cette image est trop volumineuse ! Réduisez-la ou choisissez-en une autre.";
+    errorMessageElement.textContent = "Mégazut ! Cette image est trop volumineuse ! Réduisez-la ou choisissez-en une autre.";
     sizeIndicator.parentNode.insertBefore(errorMessageElement, sizeIndicator.nextSibling);
   }
 }
 
-// Fonction pour afficher l'aperçu de l'image téléchargée
+//Fonction pour charger l'aperçu
 function displayImagePreview() {
   const input = document.getElementById('photoUpload');
   const labelForUpload = document.getElementById('uploadIconLabel');
@@ -705,9 +704,24 @@ function displayImagePreview() {
       img.alt = 'Aperçu de l\'image';
       img.classList.add('image-preview');
 
-      // Remplacer l'icône par l'aperçu de l'image
-      labelForUpload.innerHTML = '';
-      labelForUpload.appendChild(img);
+      // Créer l'élément de prévisualisation de l'image s'il n'existe pas
+      let imagePreviewContainer = document.getElementById('imagePreviewContainer');
+      if (!imagePreviewContainer) {
+        imagePreviewContainer = document.createElement('div');
+        imagePreviewContainer.id = 'imagePreviewContainer';
+        imagePreviewContainer.classList.add('image-preview-container');
+        labelForUpload.appendChild(imagePreviewContainer); // Insérer dans labelForUpload
+      }
+
+      // Retirer l'icône i à l'intérieur de labelForUpload si elle existe
+      const existingIcon = labelForUpload.querySelector('i');
+      if (existingIcon) {
+        existingIcon.remove();
+      }
+
+      // Remplacer le contenu de imagePreviewContainer par l'aperçu de l'image
+      imagePreviewContainer.innerHTML = '';
+      imagePreviewContainer.appendChild(img);
 
       // Supprimer le paragraphe et le bouton de chargement
       if (fileTypeInfo) {
@@ -721,6 +735,10 @@ function displayImagePreview() {
     reader.readAsDataURL(input.files[0]);
   }
 }
+
+
+
+
 
 
 
