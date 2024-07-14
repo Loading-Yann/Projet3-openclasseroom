@@ -665,8 +665,8 @@ input[type="button"] {
 }
 
 .submit-button {
-    width: 180px; /* Ajustez la largeur du bouton selon vos besoins */
-    height: 36px; /* Ajustez la hauteur du bouton selon vos besoins */
+    width: 180px; 
+    height: 36px; 
     background-color: #1D6154;
     color: white;
     border: none;
@@ -698,7 +698,7 @@ input[type="button"] {
   cursor: pointer;
 }
 
-.validate-button {
+.modal-content .submit-button-container .validate-button {
   background: #1D6154;
   color: white;
   border: none;
@@ -709,8 +709,8 @@ input[type="button"] {
   font-size: 16px;
 }
 
-.validate-button.active {
-  background: green;
+.modal-content .validate-button.active {
+  background: #1D6154 !important;
   cursor: pointer;
   opacity: 1;
 }

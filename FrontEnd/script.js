@@ -742,7 +742,6 @@ function displayImagePreview() {
 
 
 
-// Fonction pour vérifier la validité du formulaire et mettre à jour le bouton de soumission
 function checkFormValidity() {
   const inputFile = document.getElementById('photoUpload');
   const inputTitle = document.getElementById('photoTitle');
@@ -751,15 +750,14 @@ function checkFormValidity() {
 
   // Vérifier si tous les champs obligatoires sont remplis
   if (inputFile.files.length > 0 && inputTitle.value && selectCategory.value) {
-    submitButton.disabled = false; // Activer le bouton
-    submitButton.style.backgroundColor = '#4CAF50'; 
-    submitButton.style.cursor = 'pointer'; 
+    submitButton.classList.remove('disabled');
+    submitButton.classList.add('enabled');
   } else {
-    submitButton.disabled = true; // Désactiver le bouton
-    submitButton.style.backgroundColor = '#cccccc'; // Réinitialiser la couleur du bouton
-    submitButton.style.cursor = 'default'; // Réinitialiser le curseur
+    submitButton.classList.remove('enabled');
+    submitButton.classList.add('disabled');
   }
 }
+
 
 
 //********************************************/
