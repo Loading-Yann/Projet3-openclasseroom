@@ -531,34 +531,52 @@ footer nav ul {
   flex-direction: column;
 }
 
-.form-group {
-  position: relative; /* Assurez-vous que le positionnement est relatif */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 15px;
-  width: 420px; /* Ajustez selon vos besoins */
-  height: auto; /* La hauteur doit être ajustée pour s'adapter à son contenu */
-  border-radius: 3px;
-  background: #E8F1F6;
-  overflow: hidden; /* Cache les éléments débordants */
-  padding: 20px;
-}
-
-
+.form-group,
 .form-champ {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 420px ;
-  padding: 0px;
+  border-radius: 3px;
+  width: 100%;
+  padding: 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  background: #E8F1F6;
+  overflow: hidden;
+  padding: 20px;
+  width: 420px;
+}
+
+/* Input pour le téléchargement de la photo */
+input[type="file"] {
+  display: none;
 }
 
 .form-label {
-  display: flex;
-  justify-content: baseline;
+  display: block;
+  margin-bottom: 5px;
+  width: 100%;
+  box-sizing: border-box; 
+}
+
+.text-input,
+.select-category,
+.file-upload,
+input[type="button"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  background: #FFF;
+  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
+  border: 1px solid #ccc;
+  box-sizing: border-box; 
+}
+
+.form-label {
+  justify-content: flex-start;
 }
 
 .upload-icon {
@@ -629,28 +647,6 @@ footer nav ul {
   display: block; /* Assurez-vous que l'image est affichée en bloc */
 }
 
-/* Input pour le téléchargement de la photo */
-input[type="file"] {
-  display: none;
-}
-
-/* Styles pour les labels et les inputs */
-.form-label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.text-input,
-.select-category, 
-.file-upload,
-input[type="button"] {
-  width: 80%;
-  padding: 8px;
-  margin-bottom: 10px;
-  background: #FFF;
-  box-shadow: 0px 4px 14px 0px rgba(0, 0, 0, 0.09);
-  border: 1px solid #ccc; /* Ajout de la bordure */
-}
 
 /* Ligne horizontale */
 .form-hr {
