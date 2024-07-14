@@ -544,12 +544,6 @@ async function createAddPhotoModal() {
   labelForUpload.innerHTML = '<i class="fa-solid fa-image"></i>';
   labelForUpload.id = 'uploadIconLabel';
 //oups
-   // Conteneur pour l'aperçu de l'image
-  // const imagePreviewContainer = document.createElement('div');
-  // imagePreviewContainer.id = 'imagePreviewContainer';
-  // imagePreviewContainer.classList.add('image-preview-container');
-  // labelForUpload.appendChild(imagePreviewContainer);
-
   const inputFile = document.createElement('input');
   inputFile.type = 'file';
   inputFile.id = 'photoUpload';
@@ -559,6 +553,11 @@ async function createAddPhotoModal() {
   inputFile.style.display = 'none';
   inputFile.classList.add('file-upload');
   inputFile.addEventListener('change', () => {
+    const file = inputFile.files[0];
+    if (!checkImageSize(file)) {
+      displayErrorMessage(formGroup);
+      return;
+    }
     displayImagePreview();
     checkFormValidity();
   });
@@ -664,17 +663,25 @@ async function createAddPhotoModal() {
 }
 
 
-
-
-
-
-// Fonction pour vérifier la taille de l'image
 function checkImageSize(file) {
   const maxFileSize = 4 * 1024 * 1024; // 4 Mo en octets
-  return file.size <= maxFileSize;
+  const errorMessageElement = document.querySelector('.error-message');
+
+  // Si un message d'erreur existe, le supprimer
+  if (errorMessageElement) {
+    errorMessageElement.remove();
+  }
+
+  // Vérifier la taille de l'image
+  if (file.size > maxFileSize) {
+    return false; // Image trop grande
+  }
+
+  return true; // Taille d'image valide
 }
 
-function displayErrorMessage() {
+
+function displayErrorMessage(formGroup) {
   const sizeIndicator = document.getElementById('size-indicator');
   let errorMessageElement = document.querySelector('.error-message');
 
@@ -682,9 +689,10 @@ function displayErrorMessage() {
     errorMessageElement = document.createElement('div');
     errorMessageElement.classList.add('error-message');
     errorMessageElement.textContent = "Mégazut ! Cette image est trop volumineuse ! Réduisez-la ou choisissez-en une autre.";
-    sizeIndicator.parentNode.insertBefore(errorMessageElement, sizeIndicator.nextSibling);
+    formGroup.appendChild(errorMessageElement);
   }
 }
+
 
 //Fonction pour charger l'aperçu
 function displayImagePreview() {

@@ -674,6 +674,7 @@ input[type="button"] {
     cursor: pointer;
     text-align: center;
     font-size: 14px;
+    opacity: 0.5;
     margin: 10px; /* Centrer le bouton avec une marge autour */
 }
 
@@ -684,6 +685,7 @@ input[type="button"] {
 
 .submit-button.enabled {
   background-color: #1D6154;
+  opacity: 1;
 }
 
 .submit-button.enabled:hover {
