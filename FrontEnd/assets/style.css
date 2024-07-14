@@ -660,13 +660,13 @@ input[type="button"] {
 .submit-button-container {
   display: flex;
   text-align: center;
-  justify-content: center; /* Centrer le bouton */
+  justify-content: center; 
   width: 100%; 
 }
 
 .submit-button {
-    width: 180px; /* Ajustez la largeur du bouton selon vos besoins */
-    height: 36px; /* Ajustez la hauteur du bouton selon vos besoins */
+    width: 180px; 
+    height: 36px; 
     background-color: #1D6154;
     color: white;
     border: none;
@@ -674,7 +674,7 @@ input[type="button"] {
     cursor: pointer;
     text-align: center;
     font-size: 14px;
-    margin: 10px; /* Centrer le bouton avec une marge autour */
+    margin: 10px; 
 }
 
 .submit-button:disabled {
@@ -710,7 +710,7 @@ input[type="button"] {
 }
 
 .validate-button.active {
-  background: green;
+  background: #1D6154;
   cursor: pointer;
   opacity: 1;
 }
