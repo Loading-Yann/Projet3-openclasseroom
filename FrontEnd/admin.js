@@ -36,10 +36,14 @@ async function handleLogin(email, password) {
     }
 
     const data = await response.json();
-    localStorage.setItem('token', data.token);
+    localStorage.setItem("token", data.token);
 
-    // Redirection vers la page d'accueil
+    console.log("clé récupéré :" + data.token);
+
     window.location.href = 'index.html';
+  
+    // Redirection vers la page d'accueil
+  
   } catch (error) {
     console.error('Error:', error);
     errorMessage.textContent = error.message;

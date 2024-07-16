@@ -29,19 +29,26 @@ async function fetchData() {
 function processItem(item) {
   // Créer un élément <figure>
   const element = document.createElement("figure");
+  element.setAttribute('data-id', item.id);  // Ajouter l'attribut data-id
+  
   // Créer un élément <img> et définir ses attributs src et alt
   const imageElement = document.createElement("img");
   imageElement.src = item.imageUrl;
   imageElement.alt = item.title;
+  
   // Ajouter l'image à la figure
   element.appendChild(imageElement);
+  
   // Créer un élément <figcaption> et y ajouter le titre
   const textElement = document.createElement("figcaption");
   textElement.textContent = item.title;
+  
   // Ajouter le texte à la figure
   element.appendChild(textElement);
+  
   // Trouver le conteneur des données dans le DOM
   const container = document.getElementById("data-container");
+  
   // Ajouter la figure au conteneur
   container.appendChild(element);
 }
@@ -107,7 +114,6 @@ async function displayCategories() {
   });
 }
 
-
 async function filterWorksByCategory(selectedCategory) {
   try {
     // Récupérer les données depuis l'API
@@ -135,8 +141,6 @@ async function filterWorksByCategory(selectedCategory) {
   }
 }
 
-
-
 // Fonction pour filtrer les éléments de la galerie
 function filterGallery(category) {
   const items = document.querySelectorAll('.gallery-item');
@@ -162,7 +166,6 @@ function initFilters() {
       filterGallery(selectedCategory);
   });
 }
-
 
 // Fonction pour vérifier l'authentification
 function checkAuthentication() {
@@ -219,8 +222,8 @@ function checkAuthentication() {
   }
 }
 
-
-function createModal() {
+// Fonction pour créer la modale
+async function createModal() {
   // Supprimer la modale existante si elle existe
   const existingModal = document.getElementById("editProjectModal");
   if (existingModal) {
@@ -317,7 +320,49 @@ function createModal() {
   addPhotoButton.addEventListener('click', createAddPhotoModal);
 }
 
+// Fonction pour charger et afficher les images dans la galerie de la modale
+async function fetchAndDisplayGallery() {
+  const response = await fetch('http://localhost:5678/api/works');
+  const data = await response.json();
 
+  const galleryContainer = document.getElementById("galleryContainer");
+  galleryContainer.innerHTML = ''; // Clear the gallery before appending new items
+
+  data.forEach(item => {
+    // Créer un élément <figure> avec data-id
+    const element = document.createElement("figure");
+    element.setAttribute('data-id', item.id);
+
+    // Créer un élément <img> et définir ses attributs src et alt
+    const imageElement = document.createElement("img");
+    imageElement.src = item.imageUrl;
+    imageElement.alt = item.title;
+
+    // Ajouter l'image à la figure
+    element.appendChild(imageElement);
+
+    // Créer un élément <figcaption> et y ajouter le titre
+    const textElement = document.createElement("figcaption");
+    textElement.textContent = item.title;
+
+    // Ajouter le texte à la figure
+    element.appendChild(textElement);
+
+    // Ajouter un bouton de suppression
+    const deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-button");
+    deleteButton.textContent = "Supprimer";
+    deleteButton.addEventListener("click", () => {
+      const galleryItem = document.querySelector(`#data-container [data-id='${item.id}']`);
+      const modalGalleryItem = document.querySelector(`#modal-gallery-content [data-id='${item.id}']`);
+      deleteImage(item.id, galleryItem, modalGalleryItem);
+    });
+    element.appendChild(deleteButton);
+
+    // Ajouter la figure au conteneur de la galerie
+    galleryContainer.appendChild(element);
+  });
+}
 
 // Fonction pour fermer la modale
 function closeModal() {
@@ -326,7 +371,6 @@ function closeModal() {
     modalWrapper.remove();
   }
 }
-
 
 // Ajouter un écouteur d'événement pour fermer la modale en cliquant à l'extérieur
 // window.addEventListener("click", (event) => {
@@ -344,7 +388,6 @@ window.addEventListener("keydown", (event) => {
   }
 });
 
-
 // Fonction pour gérer les clics à l'extérieur de la modale
 function handleClickOutsideModal(event) {
   const modal = document.getElementById("editProjectModal");
@@ -355,7 +398,6 @@ function handleClickOutsideModal(event) {
     closeModal(); // Fermer la modale
   }
 }
-
 
 function initEditModal() {
   const editButton = document.getElementById("editButton");
@@ -378,7 +420,6 @@ function initEditModal() {
     console.log("Bouton Modifier non trouvé.");
   }
 }
-
 
 function addDeleteButton(galleryItem, itemId) {
   const deleteButton = document.createElement("button");
@@ -407,8 +448,6 @@ function addDeleteButton(galleryItem, itemId) {
   galleryItem.appendChild(deleteButton);
 }
 
-
-
 // Fonction pour charger et afficher les images dans la galerie de la modale
 async function fetchAndDisplayGallery() {
   const data = await fetchData(); // Récupérer les données des projets
@@ -436,9 +475,8 @@ async function fetchAndDisplayGallery() {
 }
 
 // Fonction pour envoyer une requête DELETE à l'API et supprimer l'image
-async function deleteImage(itemId, galleryItem ) {
-
-  const token = localStorage.getItem("token"); // Récupérer le token depuis le localStorage
+async function deleteImage(itemId, galleryItem, modalGalleryItem) {
+  const token = localStorage.getItem("token"); 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", `Bearer ${token}`);
@@ -454,14 +492,30 @@ async function deleteImage(itemId, galleryItem ) {
     if (!response.ok) {
       throw new Error("Network response was not ok " + response.statusText);
     }
-    createModal();
-    //Oups, j'aimerais ici que ça rouvre la modal...
+    
+    // Supprimer l'élément de la galerie principale
+    if (galleryItem && galleryItem.parentNode) {
+      galleryItem.parentNode.removeChild(galleryItem);
+    }
+
+    // Supprimer l'élément de la galerie de la modale
+    if (modalGalleryItem && modalGalleryItem.parentNode) {
+      modalGalleryItem.parentNode.removeChild(modalGalleryItem);
+    }
+    deleteImageGallery(itemId);
+    closeModal();
   } catch (error) {
     console.error("Erreur lors de la suppression de l'image:", error);
   }
 }
 
-
+// Fonction pour supprimer un élément de la galerie publique
+function deleteImageGallery(itemId) {
+  const galleryItem = document.querySelector(`[data-id='${itemId}']`);
+  if (galleryItem && galleryItem.parentNode) {
+    galleryItem.parentNode.removeChild(galleryItem);
+  }
+}
 
 // Fonction pour récupérer les works depuis l'API
 async function fetchWorks() {
@@ -477,8 +531,6 @@ async function fetchWorks() {
     return []; // Retourne un tableau vide en cas d'erreur
   }
 }
-
-
 
 // Fonction pour créer la modale d'ajout de photo
 async function createAddPhotoModal() {
@@ -508,27 +560,41 @@ async function createAddPhotoModal() {
   // Gestion de la soumission du formulaire
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+
+    const inputFile = document.getElementById('photoUpload');
+    const file = inputFile.files[0];
+
+    if (!file || !checkImageSize(file)) {
+      displayErrorMessage(formGroup);
+      return;
+    }
+
     const formData = new FormData(form);
     const token = localStorage.getItem("token");
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + token);
-    const fileInput = document.getElementById("photoUpload");
+    
     const formdata = new FormData();
-    formdata.append("image", fileInput.files[0]);
+    formdata.append("image", file);
     formdata.append("title", formData.get("title"));
     formdata.append("category", formData.get("photoCategory"));
+    
     const requestOptions = {
       method: "POST",
       headers: myHeaders,
       body: formdata,
       redirect: "follow"
     };
+    
     const apiURL = `http://localhost:5678/api/works`;
+    
     try {
       const response = await fetch(apiURL, requestOptions);
       if (!response.ok) throw new Error(`Erreur: ${response.status}`);
       const data = await response.json();
       console.log('Réponse de l\'API:', data);
+      processItem(data);
+      closeModal();
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
     }
@@ -543,7 +609,7 @@ async function createAddPhotoModal() {
   labelForUpload.classList.add('upload-icon');
   labelForUpload.innerHTML = '<i class="fa-solid fa-image"></i>';
   labelForUpload.id = 'uploadIconLabel';
-//oups
+
   const inputFile = document.createElement('input');
   inputFile.type = 'file';
   inputFile.id = 'photoUpload';
@@ -624,7 +690,7 @@ async function createAddPhotoModal() {
 
   const submitButton = document.createElement('button');
   submitButton.type = 'submit';
-  submitButton.classList.add('submit-button');
+  submitButton.classList.add('submit-button', 'disabled'); // Ajouter la classe disabled par défaut
   submitButton.textContent = 'Valider';
 
   submitButtonContainer.appendChild(submitButton);
@@ -634,13 +700,10 @@ async function createAddPhotoModal() {
   formGroup.appendChild(inputFile);
   formGroup.appendChild(uploadButton);
   formGroup.appendChild(fileTypeInfo);
-  // formGroup.appendChild(imagePreviewContainer);
-
   formChamp.appendChild(labelForTitle);
   formChamp.appendChild(inputTitle);
   formChamp.appendChild(labelForCategory); // Ajout du labelForCategory dans formChamp
   formChamp.appendChild(selectCategory);   // Ajout de selectCategory dans formChamp
-
   form.appendChild(formGroup);
   form.appendChild(formChamp);
   form.appendChild(hr);
@@ -666,6 +729,12 @@ async function createAddPhotoModal() {
 function checkImageSize(file) {
   const maxFileSize = 4 * 1024 * 1024; // 4 Mo en octets
   const errorMessageElement = document.querySelector('.error-message');
+  const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+  const labelForUpload = document.getElementById('uploadIconLabel');
+  const modalContent = document.querySelector('#editProjectModal .modal-content');
+  const formGroup = document.querySelector('.form-group'); // Sélectionnez le bon élément parent
+
+  let addedToModal = false; // Variable pour suivre si les éléments ont déjà été ajoutés à modalContent
 
   // Si un message d'erreur existe, le supprimer
   if (errorMessageElement) {
@@ -674,11 +743,37 @@ function checkImageSize(file) {
 
   // Vérifier la taille de l'image
   if (file.size > maxFileSize) {
+    // Supprimer l'image prévisualisée
+    if (imagePreviewContainer) {
+      imagePreviewContainer.innerHTML = '';
+      // Ajouter l'icône d'upload en tant que placeholder
+      labelForUpload.innerHTML = '<i class="fa-solid fa-image"></i>';
+
+      // Recréer les éléments du formulaire manquants
+      const uploadButton = document.createElement('button');
+      uploadButton.type = 'button';
+      uploadButton.classList.add('upload-button');
+      uploadButton.textContent = '+ Ajout photo';
+      uploadButton.addEventListener('click', () => document.getElementById('photoUpload').click());
+
+      const fileTypeInfo = document.createElement('p');
+      fileTypeInfo.textContent = 'jpg, png, 4mo max';
+      fileTypeInfo.classList.add('file-type-info');
+
+      // Ajouter les nouveaux éléments à formGroup s'ils ne sont pas déjà présents
+      if (!formGroup.contains(uploadButton)) {
+        formGroup.appendChild(uploadButton);
+        formGroup.appendChild(fileTypeInfo);
+      }
+    }
     return false; // Image trop grande
   }
 
   return true; // Taille d'image valide
 }
+
+
+
 
 
 function displayErrorMessage(formGroup) {
@@ -692,7 +787,6 @@ function displayErrorMessage(formGroup) {
     formGroup.appendChild(errorMessageElement);
   }
 }
-
 
 //Fonction pour charger l'aperçu
 function displayImagePreview() {
@@ -741,23 +835,28 @@ function displayImagePreview() {
     };
 
     reader.readAsDataURL(input.files[0]);
+  } else {
+    // Si aucun fichier n'est sélectionné, charger l'icône d'upload en tant que placeholder
+    labelForUpload.innerHTML = '<i class="fa-solid fa-image"></i>';
   }
 }
 
 
+// Fonction pour afficher l'icône d'upload en tant que placeholder
+function displayImagePlaceholder() {
+  const labelForUpload = document.querySelector('.upload-icon');
+  labelForUpload.innerHTML = '<i class="fa-solid fa-image"></i>';
+}
 
-
-
-
-
+// Fonction pour vérifier la validité du formulaire
 function checkFormValidity() {
   const inputFile = document.getElementById('photoUpload');
   const inputTitle = document.getElementById('photoTitle');
   const selectCategory = document.getElementById('pictures-category');
   const submitButton = document.querySelector('.submit-button');
 
-  // Vérifier si tous les champs obligatoires sont remplis
-  if (inputFile.files.length > 0 && inputTitle.value && selectCategory.value) {
+  // Vérifier si tous les champs obligatoires sont remplis ET que l'image est correcte
+  if (inputFile.files.length > 0 && inputTitle.value && selectCategory.value && checkImageSize(inputFile.files[0])) {
     submitButton.classList.remove('disabled');
     submitButton.classList.add('enabled');
   } else {

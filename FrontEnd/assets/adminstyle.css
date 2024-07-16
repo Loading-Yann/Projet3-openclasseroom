@@ -255,7 +255,8 @@ li:hover {
 	margin-top: 10px;
 }
 
-#error-message {
+.error-message {
+	display: flex;
 	margin-top: 1rem;
 	font-size: 14px;
 	color: red;
