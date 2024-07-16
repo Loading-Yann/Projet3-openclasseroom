@@ -16,8 +16,8 @@ async function fetchData() {
     // Convertir la réponse en JSON
     const data = await response.json();
     console.log(data); // Afficher les données dans la console
-    // Stocker les données dans le localStorage
-    localStorage.setItem("apiData", JSON.stringify(data));
+    // Stocker les données dans le sessionStorage
+    sessionStorage.setItem("apiData", JSON.stringify(data));
     return data;
   } catch (error) {
     // Afficher l'erreur dans la console en cas de problème
@@ -169,8 +169,8 @@ function initFilters() {
 
 // Fonction pour vérifier l'authentification
 function checkAuthentication() {
-  // Récupérer le token depuis le localStorage
-  const token = localStorage.getItem("token");
+  // Récupérer le token depuis le sessionStorage
+  const token = sessionStorage.getItem("token");
   console.log("Token récupéré:", token);
 
   // Vérifier si le token existe
@@ -196,8 +196,8 @@ function checkAuthentication() {
       loginLogoutButton.addEventListener("click", (e) => {
         e.preventDefault(); // Empêcher le comportement par défaut du lien
 
-        // Supprimer le token du localStorage pour déconnecter l'utilisateur
-        localStorage.removeItem("token");
+        // Supprimer le token du sessionStorage pour déconnecter l'utilisateur
+        sessionStorage.removeItem("token");
         console.log("Utilisateur déconnecté");
 
         // Recharger la page pour refléter les changements (mode édition désactivé)
@@ -476,7 +476,7 @@ async function fetchAndDisplayGallery() {
 
 // Fonction pour envoyer une requête DELETE à l'API et supprimer l'image
 async function deleteImage(itemId, galleryItem, modalGalleryItem) {
-  const token = localStorage.getItem("token"); 
+  const token = sessionStorage.getItem("token"); 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", `Bearer ${token}`);
@@ -570,7 +570,7 @@ async function createAddPhotoModal() {
     }
 
     const formData = new FormData(form);
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     const myHeaders = new Headers();
     myHeaders.append("Authorization", "Bearer " + token);
     
@@ -879,7 +879,7 @@ async function init() {
   await displayCategories();
   initFilters();
 
-  // Vérifier l'authentification dans le localstorage
+  // Vérifier l'authentification dans le sessionStorage
   checkAuthentication();
 
   // Initialiser la modale d'édition

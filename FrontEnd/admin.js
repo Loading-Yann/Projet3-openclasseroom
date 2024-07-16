@@ -36,7 +36,7 @@ async function handleLogin(email, password) {
     }
 
     const data = await response.json();
-    localStorage.setItem("token", data.token);
+    sessionStorage.setItem("token", data.token);
 
     console.log("clé récupéré :" + data.token);
 
