@@ -143,9 +143,12 @@ header {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  margin: 50px 0;
+  margin: 0px;
 }
+.header-content {
+margin-top: 20px;
 
+}
 #editButton {
   cursor: pointer;
 }
@@ -158,8 +161,8 @@ header {
   height: 59px;
   background-color: black;
   width: 100%;
-  margin-bottom: 50px;
 }
+
 
 #editModeHeader h2 {
   display: flex;
@@ -203,10 +206,11 @@ h2 {
   font-family: "Work Sans";
   font-size: 26px;
   font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+  font-weight: bolder;
 }
-
+.title-container h2 {
+  font-weight: bolder;
+}
 .titre-modal {
   color : black;
 }
@@ -220,7 +224,9 @@ nav li {
   padding: 0 10px;
   font-size: 1.2em;
 }
-
+nav li img {
+  height: 20px;
+}
 nav a {
   text-decoration: none;
   color: black;
@@ -263,7 +269,7 @@ li:hover {
 
 #portfolio h2 {
   text-align: center;
-  margin-bottom: 1em;
+font-weight: bolder;
 }
 
 .gallery {
@@ -369,7 +375,7 @@ footer nav ul {
 /* Styles pour les labels des boutons radio */
 .radio-button-label {
   display: inline-flex;
-  width: 179px;
+  width: auto;
   height: 36px;
   background: #fff;
   /* Fond blanc par défaut */
@@ -402,7 +408,7 @@ footer nav ul {
 }
 
 .filter-button {
-  width: 179px;
+  width: auto;
   height: 36px;
   background: #1d6154;
   color: #fff;
@@ -415,6 +421,10 @@ footer nav ul {
   margin: 10px auto;
   text-align: center;
   font-size: 14px;
+}
+.radio-button-input + span {
+  padding : 0px 20px;
+font-weight: bolder;
 }
 
 #filter-container {
@@ -515,19 +525,6 @@ footer nav ul {
   margin: 10px auto;
   text-align: center;
   font-size: 14px;
-}
-
-.addPhotoForm {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.uploadPhoto {
-  display: flex;
-  flex-direction: column;
 }
 
 .form-group,
